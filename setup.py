@@ -31,8 +31,8 @@ with open(pjoin(here, '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = dict(
-    name                = 'zfs_home_authenticator',
-    py_modules          = ['zfs_home_authenticator'],
+    name                = 'local_zfs_authenticator',
+    py_modules          = ['local_zfs_authenticator'],
     version             = version_ns['__version__'],
     description         = """Override of LocalAuth to handle zfs homedir creation.""",
     long_description    = "",
