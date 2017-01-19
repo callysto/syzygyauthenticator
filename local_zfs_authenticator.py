@@ -14,13 +14,15 @@ class LocalZFSAuthenticator(PAMAuthenticator):
     homedir_string = Unicode('/tank/home/USERNAME',
        help="String template for absloute path to user home directory"
     ).tag(config=True)
-    
+   
     def system_user_exists(self, user):
         try:
             pwd.getpwnam(user.name)
         except KeyError:
+            self.log.info('User "%s" not in LDAP' % user.name)
             return False
         else:
+            self.log.info('User "%s" in LDAP' % user.name)
             return False
 
     def add_system_user(self, user):
