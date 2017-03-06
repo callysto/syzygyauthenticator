@@ -27,15 +27,14 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the current package version.
 version_ns = {}
-with open(pjoin(here, '_version.py')) as f:
+with open(pjoin(here, 'syzygyauthenticator', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = dict(
-    name                = 'local_zfs_authenticator',
-    py_modules          = ['local_zfs_authenticator'],
+    name                = 'syzygyauthenticator',
+    packages            = ['syzygyauthenticator'],
     version             = version_ns['__version__'],
     description         = """Override of LocalAuth to handle zfs homedir creation.""",
-    long_description    = "",
     author              = "Ian Allison",
     author_email        = "iana@pims.math.ca",
     url                 = "http://jupyter.org",
