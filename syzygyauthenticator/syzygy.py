@@ -11,12 +11,17 @@ from subprocess import Popen, PIPE, STDOUT
 
 from tornado import gen
 
-from traitlets import Unicode, default, Bool
+from traitlets import Unicode, default, Bool, Integer
 from jupyterhub.traitlets import Command
 
 from jupyterhub.auth import Authenticator, LocalAuthenticator
 
 class SyzygyAuthenticator(Authenticator):
+
+    user_id = Integer(-1,
+        config=True,
+        help="""UIDnumber of the home directory owner"""
+    )
 
     homedir_string = Unicode('/tank/home/USERNAME',
        help="String template for absloute path to user home directory"
@@ -68,7 +73,13 @@ class SyzygyAuthenticator(Authenticator):
                 yield gen.maybe_future(self.add_user_homedir(user))
             else:
                 raise KeyError('User %s homedir does not exist and create_user_homedir unset')
-   
+       
+        if user.state is None:
+            user.state = {}
+        user.state['user_id'] = self.user_id
+        self.db.commit()
+        self.log.info('User "%s" has uid (%s)' % (user.name, user.state['user_id']))
+
         yield gen.maybe_future(super().add_user(user))
     
     def add_user_homedir(self, user):
@@ -85,6 +96,10 @@ class SyzygyAuthenticator(Authenticator):
             err = p.stdout.read().decode('utf8', 'replace')
             raise RuntimeError("Failed to add homedir storage for user: %s: %s"
                 % (name, err))
+
+    def pre_spawn_start(self, user, spawner):
+        """Make sure that user_id is available in all cases"""
+        spawner.load_state(user.state)
 
 class SyzygyLocalAuthenticator(SyzygyAuthenticator, LocalAuthenticator):
 	"""A version mixing in local user creation"""
