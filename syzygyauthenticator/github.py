@@ -1,5 +1,5 @@
 from .syzygy import SyzygyAuthenticator
-from oauthenticator import GithubOAuthenticator
+from oauthenticator.github import GithubOAuthenticator
 
 from jupyterhub.handlers import BaseHandler
 
