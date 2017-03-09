@@ -1,5 +1,5 @@
 from .syzygy import SyzygyAuthenticator
-from oauthenticator import GoogleOAuthenticator
+from oauthenticator import GithubOAuthenticator
 
 from jupyterhub.handlers import BaseHandler
 
@@ -7,7 +7,7 @@ from traitlets import Integer, Unicode
 
 from tornado import gen
 
-class SyzygyGoogleOAuthenticatorLogoutHandler(BaseHandler):
+class SyzygyGithubOAuthenticatorLogoutHandler(BaseHandler):
     def get(self):
         user = self.get_current_user()
         if user:
@@ -19,8 +19,8 @@ class SyzygyGoogleOAuthenticatorLogoutHandler(BaseHandler):
             self.statsd.incr('logout')
         self.redirect(self.authenticator.logoutURL)
 
-class SyzygyGoogleOAuthenticator(SyzygyAuthenticator, GoogleOAuthenticator):
-    logout_handler = SyzygyGoogleOAuthenticatorLogoutHandler
+class SyzygyGithubOAuthenticator(SyzygyAuthenticator, GithubOAuthenticator):
+    logout_handler = SyzygyGithubOAuthenticatorLogoutHandler
 
     logoutURL = Unicode('/logout',
         help="logout URL"
