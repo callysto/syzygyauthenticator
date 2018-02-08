@@ -99,7 +99,7 @@ class SyzygyAuthenticator(Authenticator):
 
     def pre_spawn_start(self, user, spawner):
         """Make sure that user_id is available in all cases"""
-        spawner.load_state(user.state)
+        #spawner.load_state(user.state)
 
 class SyzygyLocalAuthenticator(SyzygyAuthenticator, LocalAuthenticator):
 	"""A version mixing in local user creation"""

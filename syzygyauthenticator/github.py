@@ -13,9 +13,6 @@ class SyzygyGitHubOAuthenticatorLogoutHandler(BaseHandler):
         if user:
             self.log.info("User %s logged out", user.name)
             self.clear_login_cookie()
-            for name in user.other_user_cookies:
-                self.clear_logout_cookie(name)
-            user.other_user_cookies = set([])
             self.statsd.incr('logout')
         self.redirect(self.authenticator.logoutURL)
 
