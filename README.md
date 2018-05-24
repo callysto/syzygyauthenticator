@@ -12,7 +12,7 @@ This package can be installed with `pip`:
 You should edit your :file:`jupyterhub_config.py` to set the authenticator
 class, e.g.
 
-    c.JupyterHub.authenticator_class = 'syzygyauthenticator.pam.SyzygyPAMAuthenticator'
+    c.JupyterHub.authenticator_class = 'syzygyauthenticator.shib.RemoteUserAuthenticator'
 
 ## SyzygyAuthenticator
 
@@ -35,14 +35,17 @@ The authenticator also overrides the following methods
     create_user_homedir is set, then try to create it.
 
 The following new methods are defined
-  
+
   * user_homedir_exists: Check that homdir_string with USERNAME replaced is a
     valid system directory.
   * add_user_homedir: Create a user home directory
 
-## pam.SyzygyPAMAuthenticator
+## shib.RemoteUserAuthenticator
 
-This is the first pracitcal authenticator. It operates similiarly to the default
-PAMAuthenticator, but mixes in the homedir creation from the
-SyzygyAuthenticator.
+This authenticator looks for the `REMOTE_USER` header that is set by Shibboleth.
+This should contain the eduPersonTargetedID attribute (i.e. `lw90qgjwcywcdg0dh3xpykvn0a2wctetlhp5eznmu`).
 
+## systemuserspawner.SyzygySystemUserSpawner
+
+This spawner is needed to truncate the 41 character `NB_USER` (containing eduPersonTargetedID)
+into 32 characters when creating the docker containers. Linux can't handle >32 character usernames.
