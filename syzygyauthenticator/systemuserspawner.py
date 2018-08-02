@@ -13,3 +13,12 @@ class SyzygySystemUserSpawner(SystemUserSpawner):
             HOME=self.homedir,
         ))
         return env
+
+    def _user_id_default(self):
+        """
+        Get user_id from pwd lookup by name
+        Since our users logging in don't have a real system account
+        we need to use the jupyter user's UID
+        """
+        import pwd
+        return pwd.getpwnam('jupyter').pw_uid
