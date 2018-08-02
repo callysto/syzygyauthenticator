@@ -7,7 +7,7 @@ from traitlets import Unicode, Set
 
 class RemoteUserLoginHandler(BaseHandler):
 
-    def get(self):
+    async def get(self):
         self.statsd.incr('login.request')
         user = self.get_current_user()
 
