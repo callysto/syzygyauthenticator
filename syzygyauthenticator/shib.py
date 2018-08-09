@@ -16,12 +16,14 @@ class RemoteUserLoginHandler(BaseHandler):
             self.redirect(self.get_next_url(user), permanent=False)
         else:
             username = self.request.headers.get(self.authenticator.shibIDAttribute, '')
+            if not username:
+               raise web.HTTPError(403)
+            else:
+                self.log.info("User %s authorized", username)
 
-            self.log.info("User %s authorized", username)
-
-            user = self.user_from_username(username)
-            self.set_login_cookie(user)
-            self.redirect(self.get_next_url(user), permanent=False)
+                user = self.user_from_username(username)
+                self.set_login_cookie(user)
+                self.redirect(self.get_next_url(user), permanent=False)
 
 
 class RemoteUserLogoutHandler(BaseHandler):
