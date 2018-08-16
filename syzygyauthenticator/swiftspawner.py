@@ -1,7 +1,7 @@
-from syzygyauthenticator.systemuserspawner import SyzygySystemUserSpawner
+from dockerspawner import DockerSpawner
 from traitlets import Dict
 
-class SyzygySwiftSystemUserSpawner(SyzygySystemUserSpawner):
+class SyzygySwiftSpawner(DockerSpawner):
 
     openstack_auth_info = Dict(
         config=True,
@@ -9,7 +9,7 @@ class SyzygySwiftSystemUserSpawner(SyzygySystemUserSpawner):
     )
 
     def get_env(self):
-        env = super(SyzygySwiftSystemUserSpawner, self).get_env()
+        env = super(DockerSpawner, self).get_env()
         env.update(self.openstack_auth_info)
         env["JPYNB_SWIFT_CONTAINER"] = env["NB_USER"]
         return env
