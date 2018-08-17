@@ -17,9 +17,10 @@ from jupyterhub.traitlets import Command
 from jupyterhub.auth import Authenticator, LocalAuthenticator
 
 class SyzygyAuthenticator(Authenticator):
-        """Syzygy Authenticator"""
-        pass
+    """Syzygy Authenticator"""
+    pass
 
-class SyzygyLocalAuthenticator(SyzygyAuthenticator, LocalAuthenticator):
-	"""A version mixing in local user creation"""
-	pass
+    def normalize_username(self, username):
+        """Normalize a username"""
+        username = username.lower()
+        return username.split('@')[0]
