@@ -45,6 +45,11 @@ main() {
     else
         echo "Creating Homedir: ${homedir}"
         zfs create ${ZFSOPTS} ${homefs}
+
+        if [ -n "${GETTING_STARTED-}" ]; then
+            wget "${GETTING_STARTED}" -O "${homedir}/getting-started.ipynb"
+        fi
+
         chown -R ${owner}:${owner} ${homedir}
     fi
 }
