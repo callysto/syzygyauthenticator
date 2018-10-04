@@ -31,6 +31,10 @@ class RemoteUserLogoutHandler(BaseHandler):
     def get(self):
         user = self.get_current_user()
         shibLogoutURL = self.authenticator.shibLogoutURL
+
+        shibReturnURL = self.authenticator.shibReturnURL
+        if shibReturnURL != "":
+            shibLogoutURL = "%s?return=%s" % (shibLogoutURL, shibReturnURL)
         
         self.clear_login_cookie()
 
@@ -48,6 +52,7 @@ class RemoteUserAuthenticator(SyzygyAuthenticator):
     shibLogoutURL = Unicode('/Shibboleth.sso/Logout',
         help="Shibboleth logout handler."
     ).tag(config=True)
+    shibReturnURL = Unicode('', help="A URL to redirect the user after logout").tag(config=True)
 
     def get_handlers(self, app):
         return default_handlers
