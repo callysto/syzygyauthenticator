@@ -28,11 +28,11 @@ main() {
         echo "Usage ${0} <USERNAME> <OWNER>" >&2
         echo >&2
         exit 1
-    elif [[ ${1} =~ ^[a-z0-9][-a-z0-9.]*$ ]]; then
+    elif [[ ${1} =~ ^[a-z0-9][-a-z0-9._]*$ ]]; then
         username=${1}
 	owner=${2}
     else
-        echo "Username \"${1}\" doesn't match schema ^[a-z0-9][-a-z0-9.]*\$" >&2
+        echo "Username \"${1}\" doesn't match schema ^[a-z0-9][-a-z0-9._]*\$" >&2
         echo >&2
         exit 1
     fi
