@@ -9,9 +9,10 @@ class RemoteUserLoginHandler(BaseHandler):
 
     async def get(self):
         self.statsd.incr('login.request')
-        user = self.get_current_user()
+        user = self.current_user
 
         if user:
+
             self.set_login_cookie(user)
             self.redirect(self.get_next_url(user), permanent=False)
         else:
