@@ -28,7 +28,7 @@ class RemoteUserLoginHandler(BaseHandler):
             # Set intersection, any userentitlement in validEntitlements is enough
             entitlement = userEntitlements & validEntitlements
 
-            if entitlement:
+            if entitlement and self.authenticator.check_whitelist(username):
                 self.log.info("User %s authorized with entitlement %s in %s",
                               username, entitlement, validEntitlements)
                 user = self.user_from_username(username)
