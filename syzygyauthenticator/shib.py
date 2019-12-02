@@ -85,9 +85,11 @@ class RemoteUserAuthenticator(SyzygyAuthenticator):
     def normalize_username(self, username):
         """Hash the lot"""
         if username:
+            orig_username = username
             username = self.username_map.get(username, username)
             username = hashlib.sha1(
                     (os.environ.get('SHIB_SALT') + username).encode('utf8')).hexdigest()
+            self.log.info("Authenticating %s as %s", orig_username, username)
         return username
 
     def get_handlers(self, app):
