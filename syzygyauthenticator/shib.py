@@ -1,3 +1,6 @@
+import hashlib
+import os
+
 from .syzygy import SyzygyAuthenticator
 
 from jupyterhub.handlers import BaseHandler
@@ -80,12 +83,11 @@ class RemoteUserAuthenticator(SyzygyAuthenticator):
     ).tag(config=True)
 
     def normalize_username(self, username):
-        """Normalize the username - just toss away everything after @ and cast
-        to lowercase"""
-        username = username.split('@')[0]
-        username = username.lower()
-        username = username.replace('.','-')
-        username = self.username_map.get(username, username)
+        """Hash the lot"""
+        if username:
+            username = self.username_map.get(username, username)
+            username = hashlib.sha1(
+                    (os.environ.get('SHIB_SALT') + username).encode('utf8')).hexdigest()
         return username
 
     def get_handlers(self, app):
