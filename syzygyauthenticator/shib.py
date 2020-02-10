@@ -9,7 +9,7 @@ class RemoteUserLoginHandler(BaseHandler):
 
     async def get(self):
         self.statsd.incr('login.request')
-        user = self.get_current_user()
+        user = await self.get_current_user()
 
         if user:
             self.set_login_cookie(user)
@@ -35,7 +35,7 @@ class RemoteUserLogoutHandler(BaseHandler):
         shibReturnURL = self.authenticator.shibReturnURL
         if shibReturnURL != "":
             shibLogoutURL = "%s?return=%s" % (shibLogoutURL, shibReturnURL)
-        
+
         self.clear_login_cookie()
 
         self.log.info("Logout dest: %s" % shibLogoutURL)
