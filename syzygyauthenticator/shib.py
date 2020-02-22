@@ -28,6 +28,10 @@ class RemoteUserLoginHandler(BaseHandler):
             # Set intersection, any userentitlement in validEntitlements is enough
             entitlement = userEntitlements & validEntitlements
 
+            if set([username]) & self.authenticator.shibBypassUsers:
+                self.log.info("User %s is authorized as a bypass user", username)
+                entitlement = 'Bypass'
+
             if entitlement and self.authenticator.check_whitelist(username):
                 self.log.info("User %s authorized with entitlement %s in %s",
                               username, entitlement, validEntitlements)
@@ -71,6 +75,9 @@ class RemoteUserAuthenticator(SyzygyAuthenticator):
     ).tag(config=True)
     shibValidEntitlements = Set(
         help="set containing entitlements sufficient to allow access"
+    ).tag(config=True)
+    shibBypassUsers = Set(
+        help="set containing users who should skip entitlement check"
     ).tag(config=True)
     shibLogoutURL = Unicode('/Shibboleth.sso/Logout',
         help="Shibboleth logout handler."
