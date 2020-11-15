@@ -5,7 +5,7 @@ set -u
 set -o pipefail
 
 ZFSHOME="tank/home"
-ZFSOPTS="-o refquota=1G"
+ZFSOPTS="-o refquota=5G"
 
 sys_user_exists() {
     local username="$1"
