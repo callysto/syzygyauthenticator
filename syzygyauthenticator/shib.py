@@ -26,7 +26,7 @@ class RemoteUserLoginHandler(BaseHandler):
                 self.request.headers.get(self.authenticator.shibUserEntitlements, ''))
             # Nginx may chain forwared headers with a comma, multiple values
             # of the attribute from shib are separated by ";"
-            userEntitlements = set(self.request.headers.get(
+            userEntitlements = self.request.headers.get(
                 self.authenticator.shibUserEntitlements, ''
             )
             userEntitlements = set(h.strip() for h in re.split(';|,', userEntitlements))
