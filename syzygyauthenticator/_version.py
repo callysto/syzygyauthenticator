@@ -2,7 +2,7 @@ version_info = (
     0,
     1,
     0,
-    'dev', # comment-out this line for a release
+    'nginx', # comment-out this line for a release
 )
 __version__ = '.'.join(map(str, version_info[:3]))
 

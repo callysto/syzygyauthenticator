@@ -3,6 +3,7 @@ from .syzygy import SyzygyAuthenticator
 from jupyterhub.handlers import BaseHandler
 from tornado import web
 from traitlets import Unicode, Set
+import re
 
 
 class RemoteUserLoginHandler(BaseHandler):
@@ -21,8 +22,14 @@ class RemoteUserLoginHandler(BaseHandler):
             # c.ShibAuthenticator.shibUserEntitlements<- current user's attributes
             username = self.authenticator.normalize_username(
                 self.request.headers.get(self.authenticator.shibIDAttribute, ''))
+            self.log.info("Raw entitlement header: <header>%s</header>",
+                self.request.headers.get(self.authenticator.shibUserEntitlements, ''))
+            # Nginx may chain forwared headers with a comma, multiple values
+            # of the attribute from shib are separated by ";"
             userEntitlements = set(self.request.headers.get(
-                self.authenticator.shibUserEntitlements, '').split(';'))
+                self.authenticator.shibUserEntitlements, ''
+            )
+            userEntitlements = set(h.strip() for h in re.split(';|,', userEntitlements))
             validEntitlements = self.authenticator.shibValidEntitlements
 
             # Set intersection, any userentitlement in validEntitlements is enough
