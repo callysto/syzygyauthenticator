@@ -40,7 +40,8 @@ setup_args = dict(
     url                 = "http://jupyter.org",
     license             = "BSD",
     platforms           = "Linux, Mac OS X",
-    scripts             = ["zfs-homedir.sh"],
+    include_package_data = True,
+    package_data        = {'' : ['scripts/zfs-homedir.sh']},
     keywords            = ['Interactive', 'Interpreter', 'Shell', 'Web', 'ZFS'],
     classifiers         = [
         'Intended Audience :: Developers',
